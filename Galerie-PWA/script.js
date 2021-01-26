@@ -7,7 +7,7 @@ function reduireArray(array, size) {
 
 const dateTimeFormat = Intl.DateTimeFormat("fr");
 
-function afficher(json){
+function afficher(json) {
 	const selections = reduireArray(json, 4);
 
   let html = "";
@@ -60,8 +60,24 @@ function afficher(json){
   document.querySelector(".container").innerHTML = html;
 }
 
+function getFavori(id) {
+  console.log(id);
+
+  fetch(`http://192.168.1.36:8080/${id}`)
+      .then(function (response) {
+          return response.json();
+      })
+      .then(function (myJson) {
+          console.log(myJson);
+      })
+      .catch(function (error) {
+          console.log("Error: " + error);
+      });
+}
+
 document.addEventListener("DOMContentLoaded", function() {
-  fetch("https://nostalgic-lamarr-5a666c.netlify.app/images.json")
+  getFavori(12);
+  fetch("http://localhost:8080/proxy/images.json")
     .then((response) => response.json())
     .then((json) => afficher(json));  
 });
