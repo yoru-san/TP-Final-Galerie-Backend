@@ -8,6 +8,7 @@ function reduireArray(array, size) {
 const dateTimeFormat = Intl.DateTimeFormat("fr");
 
 function afficher(json) {
+  console.log("affichage");
 	const selections = reduireArray(json, 4);
 
   let html = "";
@@ -16,6 +17,7 @@ function afficher(json) {
     html += '<div class="columns">';
 
     selection.forEach(repo => {
+      console.log(repo)
       html += `
             <div class="column">
             <div class="card">
@@ -52,6 +54,7 @@ function afficher(json) {
                 </div>
               </div>
             </div>
+            <button class="button fav-btn" img-id="${repo.name}">Favori</button>
           </div>`;
     });
     html += "</div>";
@@ -63,7 +66,7 @@ function afficher(json) {
 function getFavori(id) {
   console.log(id);
 
-  fetch(`http://192.168.1.36:8080/${id}`)
+  fetch(`http://localhost:8080/${id}`)
       .then(function (response) {
           return response.json();
       })
@@ -75,11 +78,28 @@ function getFavori(id) {
       });
 }
 
+function toggleFavori(id)
+{
+  fetch(`http://localhost:8080/toggleFavori/${id}`, { method: 'PUT' })
+    .then((res) => {
+      console.log("favori mis à jour");
+    })
+}
+
 document.addEventListener("DOMContentLoaded", function() {
   getFavori(12);
   fetch("http://localhost:8080/proxy/images.json")
     .then((response) => response.json())
     .then((json) => afficher(json));  
+
+
+  document.querySelector(".container").addEventListener("click", (e) => {
+    console.log("btn clic");
+
+    const id = e.target.getAttribute("img-id")
+    console.log(id);
+    toggleFavori(id);
+  });
 });
 
 window.addEventListener('beforeinstallprompt', e => { 

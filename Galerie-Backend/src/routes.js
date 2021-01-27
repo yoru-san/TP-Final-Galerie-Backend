@@ -4,6 +4,7 @@ var favoriController = require('./controllers/favori.controller');
 
 
 router.get('/:id', favoriController.getFavori);
+router.put('/toggleFavori/:id', favoriController.toggleFavori);
 // router.get('/me/routine/:id', routineController.showRoutine);
 // router.post('/me/routine', routineController.addRoutine);
 // router.put('/me/routine/activate/:id', routineController.activateRoutine);
