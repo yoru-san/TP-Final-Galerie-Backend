@@ -1,13 +1,10 @@
 var favoris = [];
 
 exports.getFavoris = (_, res) => {
-    console.log(favoris);
     res.json(favoris);
 } 
 
 exports.toggleFavori = (req, res) => {
-    console.log("Favoris:")
-    console.log(favoris);
     var id = req.params.id;
     var index = favoris.indexOf(id);
 

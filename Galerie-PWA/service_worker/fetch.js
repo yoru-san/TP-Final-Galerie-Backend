@@ -1,7 +1,3 @@
-// self.addEventListener("fetch", event => {
-// 	console.log(event.request.url);
-// });
-
 self.addEventListener("fetch", (event) => {
   const url = event.request.url;
 
@@ -26,7 +22,6 @@ self.addEventListener("fetch", (event) => {
             url: j.url
           }));
 
-          //return new Response(JSON.stringify(formattedResponse));
           const finalResponse = new Response(JSON.stringify(formattedResponse));
           let savedResponse = finalResponse.clone();
 

@@ -74,11 +74,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   document.querySelector(".container").addEventListener("click", (e) => {
-    console.log("btn clic");
-
     const id = e.target.getAttribute("img-id")
     const isFavori = e.target.getAttribute("is-favori")
-    // console.log(id);
     toggleFavori(id, isFavori);
   });
 });

@@ -7,7 +7,6 @@ exports.getImages = (_, res) => {
             console.log("File read failed:", err);
             return;
         }
-        console.log('File data:', jsonString);
         res.json(jsonString);
     })
 }
