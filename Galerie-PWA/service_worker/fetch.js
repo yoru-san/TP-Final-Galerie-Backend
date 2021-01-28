@@ -1,7 +1,7 @@
 self.addEventListener("fetch", (event) => {
   const url = event.request.url;
 
-  if (url.indexOf("http://localhost:8080/proxy/images.json") === 0) {
+  if (url.indexOf("http://localhost:8080//images") === 0) {
     event.respondWith(
       fetch(event.request).then((response) => {
         if (response.status !== 200) {

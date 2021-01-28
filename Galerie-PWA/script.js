@@ -8,6 +8,9 @@ function reduireArray(array, size) {
 const dateTimeFormat = Intl.DateTimeFormat("fr");
 
 function afficher(json) {
+  console.log("Afficher:");
+  console.log(json);
+
   const selections = reduireArray(json, 4);
 
   let html = "";
@@ -16,9 +19,9 @@ function afficher(json) {
     html += '<div class="columns">';
     var favoris = getFavoris();
 
-    getImages().then((res) =>
-      console.log(res)
-    );
+
+    console.log("Selection:");
+    console.log(selection);
 
     selection.forEach(repo => {
       var isFavori = true;
@@ -68,9 +71,6 @@ function afficher(json) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("http://localhost:8080/proxy/images.json")
-    .then((response) => response.json())
-    .then((json) => afficher(json));
 
 
   document.querySelector(".container").addEventListener("click", (e) => {
@@ -117,8 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let fetchData;
   if (navigator.onLine) {
-    fetchData = fetch("http://localhost:8080/proxy/images.json")
-      .then((response) => response.json())
+    fetchData = getImages()
       .then((data) => localforage.setItem("data", data));
   }
   else {
