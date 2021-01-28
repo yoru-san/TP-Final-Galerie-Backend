@@ -1,7 +1,8 @@
 var favoris = [];
 
-exports.getFavori = (req, res) => {
-    console.log(req);
+exports.getFavoris = (_, res) => {
+    console.log(favoris);
+    res.json(favoris);
 } 
 
 exports.toggleFavori = (req, res) => {

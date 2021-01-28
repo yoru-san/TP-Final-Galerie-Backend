@@ -8,16 +8,21 @@ function reduireArray(array, size) {
 const dateTimeFormat = Intl.DateTimeFormat("fr");
 
 function afficher(json) {
-  console.log("affichage");
   const selections = reduireArray(json, 4);
 
   let html = "";
 
   selections.forEach(selection => {
     html += '<div class="columns">';
+    var favoris = getFavoris();
+
+    getImages().then((res) =>
+      console.log(res)
+    );
 
     selection.forEach(repo => {
-      console.log(repo)
+      var isFavori = true;
+
       html += `
             <div class="column">
             <div class="card">
@@ -53,7 +58,7 @@ function afficher(json) {
                 </div>
               </div>
             </div>
-            <button class="button fav-btn" img-id="${repo.name}">Favori</button>
+            <button class="button fav-btn" is-favori=${isFavori} img-id="${repo.name}">Favori</button>
           </div>`;
     });
     html += "</div>";
@@ -62,35 +67,7 @@ function afficher(json) {
   document.querySelector(".container").innerHTML = html;
 }
 
-function getFavori(id) {
-  console.log(id);
-
-  fetch(`http://localhost:8080/${id}`)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (myJson) {
-      console.log(myJson);
-    })
-    .catch(function (error) {
-      console.log("Error: " + error);
-    });
-
-  let promise = Notification.requestPermission().then(function (result) {
-    console.log('aaaaa' + result);
-  });
-  var notification = new Notification('Favori', { body: "L'image a été ajouté en favori." });
-}
-
-function toggleFavori(id) {
-  fetch(`http://localhost:8080/toggleFavori/${id}`, { method: 'PUT' })
-    .then((res) => {
-      console.log("favori mis à jour");
-    })
-}
-
 document.addEventListener("DOMContentLoaded", function () {
-  getFavori(12);
   fetch("http://localhost:8080/proxy/images.json")
     .then((response) => response.json())
     .then((json) => afficher(json));
@@ -100,8 +77,9 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("btn clic");
 
     const id = e.target.getAttribute("img-id")
-    console.log(id);
-    toggleFavori(id);
+    const isFavori = e.target.getAttribute("is-favori")
+    // console.log(id);
+    toggleFavori(id, isFavori);
   });
 });
 
