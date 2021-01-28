@@ -4,4 +4,4 @@
 - CORNEAU Fabio
 - LE LAY Logan
 
-## Lien Netlify :
+## Lien Netlify : https://competent-galileo-3d7a7e.netlify.app/galerie-pwa/
