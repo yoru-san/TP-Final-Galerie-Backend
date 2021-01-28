@@ -30,7 +30,7 @@ function toggleFavori(id, isFavori) {
         authorization = result;
 
         var title, body;
-        if (!isFavori) {
+        if (isFavori == "false") {
           title = "Favori ajouté";
           body = "L'image a été ajouté en favori.";
         } else {
