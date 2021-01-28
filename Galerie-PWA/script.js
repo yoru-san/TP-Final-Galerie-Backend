@@ -69,6 +69,27 @@ function afficher(json) {
   });
 
   document.querySelector(".container").innerHTML = html;
+
+  document.querySelectorAll(".fav-btn").forEach(b => {
+    b.addEventListener("click", (e) => {
+      console.log(e);
+      let id = e.target.getAttribute("img-id");
+      let isFavori = e.target.getAttribute("is-favori");
+      console.log(e.target.getAttribute("is-favori"));
+  
+      toggleFavori(id, isFavori).then(_ => {
+        if (isFavori == "true"){
+          console.log("Aj")
+          e.target.setAttribute("is-favori", false);
+          e.target.innerHTML = "Ajouter favori";
+        } else {
+          console.log("Ret")
+          e.target.setAttribute("is-favori", true);
+          e.target.innerHTML = "Retirer favori";
+        }
+      });
+    });
+  })
 }
 
 function afficherFavori(json) {
@@ -88,23 +109,7 @@ function afficherFavori(json) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  document.querySelector(".container").addEventListener("click", (e) => {
-    let id = e.target.getAttribute("img-id");
-    let isFavori = e.target.getAttribute("is-favori");
-    console.log(e.target.getAttribute("is-favori"));
 
-    toggleFavori(id, isFavori).then(_ => {
-      if (isFavori == "true"){
-        console.log("Aj")
-        e.target.setAttribute("is-favori", false);
-        e.target.innerHTML = "Ajouter favori";
-      } else {
-        console.log("Ret")
-        e.target.setAttribute("is-favori", true);
-        e.target.innerHTML = "Retirer favori";
-      }
-    });
-  });
 });
 
 window.addEventListener("beforeinstallprompt", (e) => {
