@@ -9,7 +9,7 @@ const dateTimeFormat = Intl.DateTimeFormat("fr");
 
 function afficher(json) {
   console.log("affichage");
-	const selections = reduireArray(json, 4);
+  const selections = reduireArray(json, 4);
 
   let html = "";
 
@@ -48,9 +48,8 @@ function afficher(json) {
                 <div class="content">
                    ${repo.description}
                   <br />
-                  Dernière mise à jour: <time datetime="${
-                    repo.updated_at
-                  }">${dateTimeFormat.format(new Date(repo.updated_at))}</time>
+                  Dernière mise à jour: <time datetime="${repo.updated_at
+        }">${dateTimeFormat.format(new Date(repo.updated_at))}</time>
                 </div>
               </div>
             </div>
@@ -67,30 +66,34 @@ function getFavori(id) {
   console.log(id);
 
   fetch(`http://localhost:8080/${id}`)
-      .then(function (response) {
-          return response.json();
-      })
-      .then(function (myJson) {
-          console.log(myJson);
-      })
-      .catch(function (error) {
-          console.log("Error: " + error);
-      });
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (myJson) {
+      console.log(myJson);
+    })
+    .catch(function (error) {
+      console.log("Error: " + error);
+    });
+
+  let promise = Notification.requestPermission().then(function (result) {
+    console.log('aaaaa' + result);
+  });
+  var notification = new Notification('Favori', { body: "L'image a été ajouté en favori." });
 }
 
-function toggleFavori(id)
-{
+function toggleFavori(id) {
   fetch(`http://localhost:8080/toggleFavori/${id}`, { method: 'PUT' })
     .then((res) => {
       console.log("favori mis à jour");
     })
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   getFavori(12);
   fetch("http://localhost:8080/proxy/images.json")
     .then((response) => response.json())
-    .then((json) => afficher(json));  
+    .then((json) => afficher(json));
 
 
   document.querySelector(".container").addEventListener("click", (e) => {
@@ -102,50 +105,50 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 
-window.addEventListener('beforeinstallprompt', e => { 
-  e.preventDefault() ; 
-  deferredPrompt = e ; 
-  const btn = document.getElementById('boutton') ; 
- 
-  btn.addEventListener('click', e  =>{ 
-    deferredPrompt.prompt() ; 
-    deferredPrompt.userChoice 
-      .then((choiceResult) => { 
-         if (choiceResult.outcome === 'accepted') {
-           console.log('A2HS prompt accepté'); 
-         } else { 
-            console.log('A2HS prompt décliné'); 
-       } 
-    deferredPrompt = null; 
-   }); 
-  }) ; 
-}) ;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.getElementById('boutton');
 
-window.addEventListener('appinstalled', e => { 
-	console.log('application installée') ; 
-}) ;
+  btn.addEventListener('click', e => {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice
+      .then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('A2HS prompt accepté');
+        } else {
+          console.log('A2HS prompt décliné');
+        }
+        deferredPrompt = null;
+      });
+  });
+});
+
+window.addEventListener('appinstalled', e => {
+  console.log('application installée');
+});
 
 document.addEventListener("DOMContentLoaded", function () {
-	if (navigator.onLine) {
-	document.querySelector(".notification").setAttribute("hidden", "");
-	}
+  if (navigator.onLine) {
+    document.querySelector(".notification").setAttribute("hidden", "");
+  }
 
-	window.addEventListener("online", () => {
-	document.querySelector(".notification").setAttribute("hidden", "");
-	});
-	window.addEventListener("offline", () => {
-	document.querySelector(".notification").removeAttribute("hidden");
-	});
+  window.addEventListener("online", () => {
+    document.querySelector(".notification").setAttribute("hidden", "");
+  });
+  window.addEventListener("offline", () => {
+    document.querySelector(".notification").removeAttribute("hidden");
+  });
 
-	let fetchData;
-	if (navigator.onLine) {
-		fetchData = fetch("http://localhost:8080/proxy/images.json")
-		  .then((response) => response.json())
-		  .then((data) => localforage.setItem("data", data));
-	} 
-	else {
-		fetchData = localforage.getItem("data");
-	}
+  let fetchData;
+  if (navigator.onLine) {
+    fetchData = fetch("http://localhost:8080/proxy/images.json")
+      .then((response) => response.json())
+      .then((data) => localforage.setItem("data", data));
+  }
+  else {
+    fetchData = localforage.getItem("data");
+  }
 
-	fetchData.then((json) => afficher(json));
+  fetchData.then((json) => afficher(json));
 });
