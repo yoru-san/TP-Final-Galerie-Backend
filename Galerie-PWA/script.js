@@ -92,6 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let id = e.target.getAttribute("img-id");
     let isFavori = e.target.getAttribute("is-favori");
     console.log(e.target.getAttribute("is-favori"));
+
     toggleFavori(id, isFavori).then(_ => {
       if (isFavori == "true"){
         console.log("Aj")
@@ -102,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
         e.target.setAttribute("is-favori", true);
         e.target.innerHTML = "Retirer favori";
       }
-      
     });
   });
 });
