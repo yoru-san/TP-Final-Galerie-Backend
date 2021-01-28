@@ -15,17 +15,14 @@ function afficher(json) {
 
   let html = "";
 
-  selections.forEach(selection => {
+  selections.forEach((selection) => {
     html += '<div class="columns">';
     var favoris = getFavoris();
-
 
     console.log("Selection:");
     console.log(selection);
 
-    selection.forEach(repo => {
-      var isFavori = true;
-
+    selection.forEach((repo) => {
       html += `
             <div class="column">
             <div class="card">
@@ -56,51 +53,80 @@ function afficher(json) {
                 <div class="content">
                    ${repo.description}
                   <br />
-                  Dernière mise à jour: <time datetime="${repo.updated_at
-        }">${dateTimeFormat.format(new Date(repo.updated_at))}</time>
+                  Dernière mise à jour: <time datetime="${
+                    repo.updated_at
+                  }">${dateTimeFormat.format(new Date(repo.updated_at))}</time>
                 </div>
               </div>
             </div>
-            <button class="button fav-btn" is-favori=${isFavori} img-id="${repo.name}">Favori</button>
+            <button class="button fav-btn" img-id="${
+              repo.id
+            }">Ajouter favori</button>
           </div>`;
     });
     html += "</div>";
+
   });
 
   document.querySelector(".container").innerHTML = html;
 }
 
+function afficherFavori(json) {
+  console.log("Favoris:");
+  console.log(json);
+
+  buttons = document.querySelectorAll(".fav-btn");
+  buttons.forEach((b) => {
+    if (json.indexOf(b.getAttribute("img-id")) != -1) {
+      b.setAttribute("is-favori", true);
+      b.innerHTML = "Retirer favori";
+    } else {
+      b.setAttribute("is-favori", false);
+      b.innerHTML = "Ajouter favori";
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
-
-
   document.querySelector(".container").addEventListener("click", (e) => {
-    const id = e.target.getAttribute("img-id")
-    const isFavori = e.target.getAttribute("is-favori")
-    toggleFavori(id, isFavori);
+    let id = e.target.getAttribute("img-id");
+    let isFavori = e.target.getAttribute("is-favori");
+    console.log(e.target.getAttribute("is-favori"));
+    toggleFavori(id, isFavori).then(_ => {
+      if (isFavori == "true"){
+        console.log("Aj")
+        e.target.setAttribute("is-favori", false);
+        e.target.innerHTML = "Ajouter favori";
+      } else {
+        console.log("Ret")
+        e.target.setAttribute("is-favori", true);
+        e.target.innerHTML = "Retirer favori";
+      }
+      
+    });
   });
 });
 
-window.addEventListener('beforeinstallprompt', e => {
+window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  const btn = document.getElementById('boutton');
+  const btn = document.getElementById("boutton");
 
-  btn.addEventListener('click', e => {
+  btn.addEventListener("click", (e) => {
     deferredPrompt.prompt();
-    deferredPrompt.userChoice
-      .then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('A2HS prompt accepté');
-        } else {
-          console.log('A2HS prompt décliné');
-        }
-        deferredPrompt = null;
-      });
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === "accepted") {
+        console.log("A2HS prompt accepté");
+      } else {
+        console.log("A2HS prompt décliné");
+      }
+      deferredPrompt = null;
+    });
   });
 });
 
-window.addEventListener('appinstalled', e => {
-  console.log('application installée');
+window.addEventListener("appinstalled", (e) => {
+  console.log("application installée");
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -115,14 +141,18 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".notification").removeAttribute("hidden");
   });
 
-  let fetchData;
+  let fetchImages;
+  let fetchFavoris;
   if (navigator.onLine) {
-    fetchData = getImages()
-      .then((data) => localforage.setItem("data", data));
-  }
-  else {
-    fetchData = localforage.getItem("data");
+    fetchImages = getImages().then((img) => localforage.setItem("images", img));
+    fetchFavoris = getFavoris().then((fav) => localforage.setItem("favoris", fav));
+  } else {
+    fetchImages = localforage.getItem("images");
+    fetchImages = localforage.getItem("favoris");
   }
 
-  fetchData.then((json) => afficher(json));
+  fetchImages.then((json) => {
+    afficher(json)
+    fetchFavoris.then((json) => afficherFavori(json));
+  });
 });

@@ -1,9 +1,15 @@
 function getFavoris() {
+    console.log("Get Favoris")
     return fetch(`http://localhost:8080/favoris`)
-        .then((response) => response.json());
+        .then((response) => response.json())
+        .then((json) => json)
+        .catch((error) => {
+            console.log("Error: " + error);
+        });
 }
 
 function getImages() {
+    console.log("Get Images")
     return fetch(`http://localhost:8080/images`)
         .then(function (response) {
             return response.json();
@@ -18,7 +24,7 @@ function getImages() {
 
 function toggleFavori(id, isFavori) {
     var authorization;
-    fetch(`http://localhost:8080/toggleFavori/${id}`, { method: 'PUT' })
+    return fetch(`http://localhost:8080/toggleFavori/${id}`, { method: 'PUT' })
         .then((res) => {
             Notification.requestPermission().then(function (result) {
                 authorization = result;
